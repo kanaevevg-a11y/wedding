@@ -610,7 +610,6 @@
         width: calc(100% - 48px);
         height: 430px;
         object-fit: cover;
-        object-position: center 15%;
         border: 8px solid rgba(255, 250, 245, .88);
         filter: grayscale(1) contrast(1.02) brightness(.88);
         box-shadow: 0 18px 38px rgba(44, 24, 16, .2);
@@ -846,73 +845,39 @@
       
 
     
-      /* ══ MOBILE FIX ══ */
       html, body { overflow-x: hidden; }
       h1 { font-size: clamp(40px, 12.5vw, 64px) !important; }
       h2 { font-size: clamp(30px, 9vw, 46px) !important; }
       section { padding-left: 18px !important; padding-right: 18px !important; }
       .hero { min-height: 100vh !important; padding: 24px 18px 36px !important; }
-
       @media (max-width: 430px) {
-        /* Photo: large, centered */
-        .hero-photo-wrap {
-          margin-top: 10px !important;
-          width: calc(100% - 20px) !important;
-        }
-        .hero-photo {
-          height: 68vw !important;
-          max-height: 360px !important;
-        }
-
-        /* Ribbon: fully BELOW the photo */
-        .hero-ribbon {
-          bottom: -58px !important;
-          left: -14px !important;
-          right: -14px !important;
-          font-size: clamp(17px, 5.5vw, 31px) !important;
-          min-height: 42px !important;
-        }
-
-        /* Names: small, at very top corners of photo-wrap */
+        .hero-photo-wrap { margin-top: 10px !important; width: calc(100% - 20px) !important; }
+        .hero-photo { height: 68vw !important; max-height: 360px !important; }
+        .hero-ribbon { bottom: -58px !important; left: -14px !important; right: -14px !important; font-size: clamp(17px, 5.5vw, 31px) !important; }
         .names { font-size: 15px !important; }
-        .names span:first-child { left: 6px !important; top: 22px !important; font-size: 15px !important; }
-        .names span:last-child  { right: 6px !important; top: 22px !important; font-size: 15px !important; }
-
-        /* Hearts: pushed to far left/right edges, off the photo */
+        .names span:first-child { left: 6px !important; top: 22px !important; }
+        .names span:last-child  { right: 6px !important; top: 22px !important; }
         .doodle-heart { width: 22px !important; height: 20px !important; }
-        .doodle-heart.h6 { left: 2px  !important; top: 88px  !important; width: 16px !important; }
-        .doodle-heart.h1 { left: 2px  !important; top: 200px !important; width: 20px !important; }
-        .doodle-heart.h2 { left: 22px !important; top: 80px  !important; width: 22px !important; }
+        .doodle-heart.h6 { left: 2px !important; top: 88px !important; width: 16px !important; }
+        .doodle-heart.h1 { left: 2px !important; top: 200px !important; width: 20px !important; }
+        .doodle-heart.h2 { left: 22px !important; top: 80px !important; width: 22px !important; }
         .doodle-heart.h3 { right: 22px !important; top: 200px !important; width: 22px !important; }
-        .doodle-heart.h4 { right: 2px  !important; top: 80px  !important; width: 20px !important; }
-        .doodle-heart.h5 { right: 2px  !important; top: 330px !important; width: 18px !important; }
-
-        /* Extra margin to push "Узнали?" below ribbon */
+        .doodle-heart.h4 { right: 2px !important; top: 80px !important; width: 20px !important; }
+        .doodle-heart.h5 { right: 2px !important; top: 330px !important; width: 18px !important; }
         .hero-bottom { margin-top: 84px !important; }
         .hero-bottom .couple { font-size: clamp(28px, 9vw, 48px) !important; }
       }
-
-      /* Date */
       .cal-date-big { font-size: clamp(40px, 12vw, 68px) !important; }
-
-      /* Countdown */
       #countdown { gap: clamp(3px, 1.5vw, 12px) !important; flex-wrap: nowrap !important; }
       .cd-item { min-width: clamp(38px, 12vw, 60px) !important; }
       .cd-num  { font-size: clamp(26px, 8vw, 44px) !important; }
       .cd-lbl, .cd-label { font-size: clamp(8px, 2vw, 11px) !important; }
       .cd-sep  { font-size: clamp(22px, 6.5vw, 36px) !important; }
-
-      /* Gallery */
       .gallery img { height: clamp(120px, 33vw, 210px) !important; }
       .photo-polaroid img { height: clamp(170px, 50vw, 280px) !important; }
-      .final { min-height: clamp(480px, 120vw, 680px) !important; }
-      .final img { height: clamp(240px, 60vw, 430px) !important; object-position: center 15% !important; }
+      .final img { object-position: center 15% !important; height: clamp(240px, 60vw, 430px) !important; }
       .final h2 { font-size: clamp(34px, 11vw, 58px) !important; }
-
-      @media (min-width: 720px) {
-        body { padding: 28px 0; }
-        .phone { border-radius: 22px; }
-      }
+      @media (min-width: 720px) { body { padding: 28px 0; } .phone { border-radius: 22px; } }
 
     </style>
   </head>
@@ -1127,7 +1092,8 @@
     var name=nameEl?nameEl.value.trim():'';
     if(!name){if(nameEl)nameEl.focus();return;}
     btn.disabled=true;btn.textContent='...';
-    fetch(RSVP_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,attending:attending,ts:new Date().toISOString()})}).catch(function(){});
+    var params='name='+encodeURIComponent(name)+'&attending='+attending+'&ts='+encodeURIComponent(new Date().toISOString());
+    var img=new Image();img.src=RSVP_URL+'?'+params;
     var actions=btn.closest('.rsvp-actions');if(actions)actions.style.display='none';
     var msg=document.createElement('p');
     msg.style.cssText='text-align:center;font-family:Arial,sans-serif;font-size:14px;color:#5c0711;margin-top:10px';
